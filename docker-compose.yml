@@ -1,0 +1,51 @@
+version: '3.0'
+services:
+  RabbitMq:
+    image: rabbitmq:3-alpine
+    container_name: RabbitMq
+    ports:
+      - "5672:5672"
+    environment:
+      RABBITMQ_DEFAULT_USER: "admin"
+      RABBITMQ_DEFAULT_PASS: "admin"
+  MongoStorage:
+    image: mongo:6-jammy
+    container_name: mongodb
+    restart: always
+    ports:               
+      - "27017:27017"
+  PostgreSQL:
+    container_name: postgreSQL
+    hostname: postgreSQL
+    image: postgres:16.0-alpine3.18
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: 111
+      POSTGRES_DB: TicTacToeDb
+  TicTacToeApi:
+    image: tictactoeapi
+    container_name: tictactoeapi
+    ports:
+      - "5000:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT:Production
+      - ASPNETCORE_URLS=http://+:80
+      - AuthOptions__Issuer=TicTacToeAuth
+      - AuthOptions__Audience=TicTacToe
+      - AuthOptions__JwtSecretKey=dsfgdsfgsdfgddsfgsdfgsfgsdfgsdfgsdf
+      - AuthOptions__AccessTokenLifetimeInMinutes=10000
+      - ConnectionStrings__PostgreSQL=Host=postgreSQL;Port=5432;Database=TicTacToeDb;User Id=dev;Password=111;Include Error Detail=true;
+      - ConnectionStrings__RabbitMQ=amqp://admin:admin@RabbitMq:5672
+      - ConnectionStrings__MongoDb=mongodb://mongodb:27017
+      - DbConfigs__MongoDbName=main
+    build:
+      context: ./TicTacToeBackend/Api
+      dockerfile: Dockerfile
+    depends_on:
+      - RabbitMq
+      - MongoStorage
+      - PostgreSQL
+  
