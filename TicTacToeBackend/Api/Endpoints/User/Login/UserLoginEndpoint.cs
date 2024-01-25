@@ -11,7 +11,7 @@ public class UserLoginEndpoint : IEndpoint
 {
 	public void AddRoute(IEndpointRouteBuilder app)
 	{
-		app.MapPost("auth/login", async (
+		app.MapPut("auth/login", async (
 				UserLoginRequest request,
 				[FromServices] IMapper mapper,
 				[FromServices] IMediator mediatr) =>

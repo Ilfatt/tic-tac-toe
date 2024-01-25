@@ -13,7 +13,7 @@ public class MappingProfile : Profile
 	{
 		CreateMap<UserRegistrationRequest, UserRegistrationCommand>();
 		CreateMapFromResult<UserRegistrationResult, UserRegistrationResponse>();
-		
+
 		CreateMap<UserLoginRequest, UserLoginQuery>();
 		CreateMapFromResult<UserLoginResult, UserLoginResponse>();
 	}
