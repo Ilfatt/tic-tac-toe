@@ -5,8 +5,10 @@ import { colors } from "../enums"
 import { useState } from "react";
 import ModalSearchWindow from "./ModalWindow";
 import RaitingList from "./RaitingList";
+import { removeToken } from "../services/ApiConnection";
+import UseStores from "../hooks/useStores";
 
-type ButtonProps = {
+interface ButtonProps {
   isActive?: boolean | undefined
 }
 
@@ -35,7 +37,7 @@ const ButtonContainer = styled.div`
   gap: 26px;
 `
 
-const Button = styled.div<ButtonProps>`
+const Button = styled.button<ButtonProps>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -53,6 +55,7 @@ const Button = styled.div<ButtonProps>`
 const PageHeader : React.FC = () => {
   const navigate = useNavigate();
   const [ratingModal, setRatingModal] = useState<boolean | undefined>(undefined);
+  const { userStore } = UseStores();
 
   return (
     <Header>
@@ -70,7 +73,13 @@ const PageHeader : React.FC = () => {
         <img src={icons.logo}/>
       </Icon>
       <ButtonContainer>
-        <Button>
+        <Button
+          onClick={() => {
+            removeToken();
+            userStore.clearStore();
+            window.location.reload();
+          }}
+        >
           Выйти
         </Button>
       </ButtonContainer>

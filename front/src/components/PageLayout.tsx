@@ -12,11 +12,11 @@ const Layout = styled.div<LayoutProps>`
   gap: ${(props) => props.gap ? `${props.gap}px` : '0px'};
 `;
 
-type LayoutProps = {
+interface LayoutProps {
   gap?: string;
 }
 
-type Props = {
+interface Props {
   children?: React.ReactElement[] | React.ReactElement;
   gap?: string;
 }
