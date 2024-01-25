@@ -17,9 +17,9 @@ public static class HttpContextExtensions
 			throw new ArgumentException("User not authenticated");
 
 		var claim = httpContext.User.Claims
-			            .First(claim => claim.Type == ClaimTypes.NameIdentifier)
+			            .FirstOrDefault(claim => claim.Type == nameof(ClaimTypes.NameIdentifier))
 		            ?? throw new ArgumentException($"Authenticated user has not claim" +
-		                                           $" with type '{ClaimTypes.NameIdentifier}'");
+		                                           $" with type '{nameof(ClaimTypes.NameIdentifier)}'");
 
 		return new Guid(claim.Value);
 	}
