@@ -1,5 +1,7 @@
 using System.Reflection;
+using Core.Contracts;
 using Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Api.Extensions;
@@ -12,11 +14,21 @@ public static class DbConfiguratorAndMigrator
 	/// <param name="builder">WebApplicationBuilder</param>
 	public static void ConfigurePostgresqlConnection(this WebApplicationBuilder builder)
 	{
-		builder.Services.AddDbContext<AppDbContext>(
+		builder.Services.AddIdentity<IdentityUser<Guid>, IdentityRole<Guid>>(options =>
+			{
+				options.Password.RequiredLength = 1;
+				options.Password.RequireNonAlphanumeric = false;
+				options.Password.RequireLowercase = false;
+				options.Password.RequireUppercase = false;
+				options.Password.RequireDigit = false;
+			})
+			.AddEntityFrameworkStores<AppDbContext>();
+		
+		builder.Services.AddDbContext<IDbContext, AppDbContext>(
 			options =>
 			{
 				options.UseNpgsql(
-					builder.Configuration.GetConnectionString("PostreSQL"),
+					builder.Configuration.GetConnectionString("PostgreSQL"),
 					opt =>
 					{
 						opt.MigrationsAssembly(typeof(AppDbContext).GetTypeInfo().Assembly.GetName().Name);

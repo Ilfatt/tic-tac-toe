@@ -1,4 +1,6 @@
 using MongoDB.Driver;
+using TemporaryStorage;
+using TemporaryStorage.Models;
 
 namespace Api.Extensions;
 
@@ -9,6 +11,8 @@ public static class MongoDbConfiguration
 		var client = new MongoClient(configuration.GetConnectionString("MongoDb"));
 		var database = client.GetDatabase(configuration["DbConfigs:MongoDbName"]);
 
-		serviceCollection.AddSingleton(database);
+		serviceCollection.AddSingleton<IMongoDbStorage<UserRating>>(
+			new MongoDbStorage<UserRating>(
+				database.GetCollection<UserRating>(nameof(UserRating))));
 	}
 }

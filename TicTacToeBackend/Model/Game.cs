@@ -8,9 +8,14 @@ namespace Model;
 public class Game
 {
 	/// <summary>
+	/// id игры 
+	/// </summary>
+	public Guid Id { get; set; }
+	
+	/// <summary>
 	/// Игрок1
 	/// </summary>
-	public required IdentityUser? Player1 { get; set; }
+	public required IdentityUser<Guid>? Player1 { get; set; }
 
 	/// <summary>
 	/// id Игрока1
@@ -20,7 +25,7 @@ public class Game
 	/// <summary>
 	/// Игрок1
 	/// </summary>
-	public IdentityUser? Player2 { get; set; }
+	public IdentityUser<Guid>? Player2 { get; set; }
 
 	/// <summary>
 	/// id Игрока2

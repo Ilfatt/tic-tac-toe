@@ -2,7 +2,7 @@ version: '3.0'
 services:
   RabbitMq:
     image: rabbitmq:3-alpine
-    container_name: rabbitmq
+    container_name: RabbitMq
     ports:
       - "5672:5672"
     environment:
@@ -12,12 +12,15 @@ services:
     image: mongo:6-jammy
     container_name: mongodb
     restart: always
-  DbAuth:
-    container_name: DbAuth
+    ports:               
+      - "27017:27017"
+  PostgreSQL:
+    container_name: postgreSQL
+    hostname: postgreSQL
     image: postgres:16.0-alpine3.18
     restart: always
     ports:
-      - "3003:5432"
+      - "5432:5432"
     environment:
       POSTGRES_USER: dev
       POSTGRES_PASSWORD: 111
@@ -28,17 +31,14 @@ services:
     ports:
       - "5000:80"
     environment:
-      - RabbitMqConfig__Username=admin
-      - RabbitMqConfig__Password=admin
-      - RabbitMqConfig__Hostname=RabbitMq
-      - RabbitMqConfig__Port=5672
       - ASPNETCORE_ENVIRONMENT:Production
       - ASPNETCORE_URLS=http://+:80
-      - AuthOptions__Issuer=RugramAuth
-      - AuthOptions__Audience=Rugram
-      - AuthOptions__JwtSecretKey=123124134dgfsdfgadfg
-      - AuthOptions__AccessTokenLifetimeInMinutes=2
-      - ConnectionStrings__PostreSQL=${AuthConnectionStringPostreSQL}
+      - AuthOptions__Issuer=TicTacToeAuth
+      - AuthOptions__Audience=TicTacToe
+      - AuthOptions__JwtSecretKey=dsfgdsfgsdfgddsfgsdfgsfgsdfgsdfgsdf
+      - AuthOptions__AccessTokenLifetimeInMinutes=10000
+      - ConnectionStrings__PostgreSQL=Host=postgreSQL;Port=5432;Database=TicTacToeDb;User Id=dev;Password=111;Include Error Detail=true;
+      - ConnectionStrings__RabbitMQ=amqp://admin:admin@RabbitMq:5672
       - ConnectionStrings__MongoDb=mongodb://mongodb:27017
       - DbConfigs__MongoDbName=main
     build:
@@ -47,4 +47,5 @@ services:
     depends_on:
       - RabbitMq
       - MongoStorage
+      - PostgreSQL
   

@@ -13,7 +13,7 @@ public static class RabbitMqConfiguration
 
 			config.UsingRabbitMq((ctx, cfg) =>
 			{
-				cfg.Host(applicationBuilder.Configuration["RabbitMqConfig:Hostname"]);
+				cfg.Host(applicationBuilder.Configuration.GetConnectionString("RabbitMQ"));
 				cfg.ConfigureEndpoints(ctx);
 			});
 		});
