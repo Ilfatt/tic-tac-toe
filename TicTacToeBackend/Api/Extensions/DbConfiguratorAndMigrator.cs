@@ -23,7 +23,7 @@ public static class DbConfiguratorAndMigrator
 				options.Password.RequireDigit = false;
 			})
 			.AddEntityFrameworkStores<AppDbContext>();
-		
+
 		builder.Services.AddDbContext<IDbContext, AppDbContext>(
 			options =>
 			{

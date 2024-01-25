@@ -11,7 +11,7 @@ public class Game
 	/// id игры 
 	/// </summary>
 	public Guid Id { get; set; }
-	
+
 	/// <summary>
 	/// Игрок1
 	/// </summary>

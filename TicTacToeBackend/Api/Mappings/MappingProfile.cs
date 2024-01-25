@@ -12,7 +12,7 @@ public class MappingProfile : Profile
 		CreateMap<UserRegistrationRequest, UserRegistrationCommand>();
 		CreateMapFromResult<UserRegistrationResult, UserRegistrationResponse>();
 	}
-	
+
 	private void CreateMapFromResult<TSource, TDestination>()
 	{
 		CreateMap<TSource, TDestination>();
