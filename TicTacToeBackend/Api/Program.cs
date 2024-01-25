@@ -10,8 +10,9 @@ builder.AddSwagger();
 builder.ConfigurePostgresqlConnection();
 builder.AddMasstransitRabbitMq();
 builder.AddAuthorization();
-builder.Services.AddCors();
 
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddCors();
 builder.Services.AddMongoDb(builder.Configuration);
 
 var validatorsAssembly = typeof(UserRegistrationValidator).Assembly;
@@ -36,7 +37,7 @@ app.UseCors(option =>
 {
 	option.AllowAnyHeader();
 	option.AllowAnyMethod();
-	option.AllowCredentials();
+	option.AllowAnyOrigin();
 });
 
 app.Run();
