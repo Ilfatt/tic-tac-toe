@@ -7,11 +7,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using TemporaryStorage;
+using TemporaryStorage.Models;
 
 namespace Core.Features.User.Login;
 
 public class UserLoginQueryHandler
-	(UserManager<IdentityUser<Guid>> userManager, IConfiguration configuration)
+	(UserManager<IdentityUser<Guid>> userManager,
+		IConfiguration configuration, 
+		IMongoDbStorage<UserRating> mongoDbStorage)
 	: IQueryHandler<UserLoginQuery, UserLoginResult>
 {
 	public async Task<Result<UserLoginResult>> Handle(UserLoginQuery request, CancellationToken cancellationToken)
@@ -43,7 +47,9 @@ public class UserLoginQueryHandler
 		};
 
 		var token = tokenHandler.CreateToken(tokenDescriptor);
+		var userRating = await mongoDbStorage.GetByIdAsync(user.Id) 
+		                 ?? throw new ArgumentException($"UserRaing, for user with id: {user.Id} not found. ");
 
-		return new UserLoginResult(tokenHandler.WriteToken(token));
+		return new UserLoginResult(tokenHandler.WriteToken(token), user.UserName!, userRating.Rating);
 	}
 }

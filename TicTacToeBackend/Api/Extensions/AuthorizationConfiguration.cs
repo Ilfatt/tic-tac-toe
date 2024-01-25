@@ -13,7 +13,13 @@ public static class AuthorizationConfiguration
 	public static void AddAuthorization(this WebApplicationBuilder builder)
 	{
 		builder.Services.AddAuthorization();
-		builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+		builder.Services.AddAuthentication(config =>
+			{
+				config.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+				config.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+				config.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
+				config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+			})
 			.AddJwtBearer(options =>
 			{
 				if (builder.Environment.IsDevelopment()) options.RequireHttpsMetadata = false;
