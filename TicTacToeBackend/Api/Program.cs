@@ -1,5 +1,8 @@
+using Api.Events;
 using Api.Extensions;
 using Api.Mappings;
+using Api.Services;
+using Api.Services.Abstractions;
 using Core.Features.User.Registration;
 using FluentValidation;
 using MediatR;
@@ -12,6 +15,9 @@ builder.AddMasstransitRabbitMq();
 builder.AddAuthorization();
 
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IUserService, UserService>()
+	.AddScoped<IEventMessageHandler, IEventMessageHandler>();
+
 builder.Services.AddCors();
 builder.Services.AddMongoDb(builder.Configuration);
 

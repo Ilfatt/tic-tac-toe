@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Identity;
+using Core.Features.Game;
 
 namespace Model;
 
@@ -8,37 +8,37 @@ namespace Model;
 public class Game
 {
 	/// <summary>
-	/// id игры 
+	/// Идентификатор
 	/// </summary>
 	public Guid Id { get; set; }
 
 	/// <summary>
-	/// Игрок1
+	/// Идентификатор хоста
 	/// </summary>
-	public required IdentityUser<Guid>? Player1 { get; set; }
+	public required Guid OwnerId { get; set; }
 
 	/// <summary>
-	/// id Игрока1
+	/// Идентификатор соперника
 	/// </summary>
-	public required Guid? Player1Id { get; set; }
+	public Guid? OpponentId { get; set; }
 
 	/// <summary>
-	/// Игрок1
+	/// Минимальный требуемый рейтинг
 	/// </summary>
-	public IdentityUser<Guid>? Player2 { get; set; }
-
+	public required int MinRate { get; set; }
+	
 	/// <summary>
-	/// id Игрока2
+	/// Максимальный возможный рейтинг
 	/// </summary>
-	public Guid? Player2Id { get; set; }
-
+	public required int MaxRate { get; set; }
+	
 	/// <summary>
-	/// Максимальный рейтинг для лобби
+	/// Статус игры
 	/// </summary>
-	public required int MaxRating { get; set; }
-
+	public required GameState GameState { get; set; }
+	
 	/// <summary>
-	/// Карта игры, -1 -пусто, 0 - 0, 1 - X. 
+	/// Карта игры
 	/// </summary>
-	public required int[] Map { get; init; } = { -1, -1, -1, -1, -1, -1, -1, -1, -1 };
+	public required GameMapSymbol[] GameMap { get; set; }
 }

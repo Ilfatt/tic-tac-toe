@@ -20,7 +20,7 @@ public class GetUserDataQueryHandler
 
 		var userRating = await mongoDbStorage.GetByIdAsync(request.UserId)
 		                 ?? throw new ArgumentException(
-			                 $"UserRaing, for user with id: {request.UserId} not found. ");
+			                 $"UserRate, for user with id: {request.UserId} not found. ");
 
 		return new GetUserDataResult(username, userRating.Rating);
 	}
