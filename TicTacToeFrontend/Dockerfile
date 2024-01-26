@@ -1,13 +1,17 @@
-FROM node:14
+FROM node:18.13.0-alpine
 
 WORKDIR /app
 
-COPY ./TicTacToeFrontend/package*.json ./
+COPY ./package.json .
 
 RUN npm install
 
-COPY ./TicTacToeFrontend/ .
+COPY . .
+
+RUN npm install -g vite
+
+RUN vite build
 
 EXPOSE 80
 
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev" ]
