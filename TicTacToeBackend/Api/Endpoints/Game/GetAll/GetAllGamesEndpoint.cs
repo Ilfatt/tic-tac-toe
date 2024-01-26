@@ -21,7 +21,9 @@ public class GetAllGamesEndpoint : IEndpoint
 
                 return response.HttpStatusCode switch
                 {
-                    200 => Results.Ok(mapper.Map<GetAllGamesResponse>(response)),
+                    200 => Results.Ok(new GetAllGamesResponse(
+                        response.Body!.GetGamesResult,
+                        response.Body.TotalCount)),
                     400 => Results.BadRequest(),
                     _ => Results.Problem(statusCode: 500)
                 };
