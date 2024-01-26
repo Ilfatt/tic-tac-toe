@@ -1,4 +1,4 @@
-using Core.MessageConsumers;
+using Api.MessageConsumers;
 using MassTransit;
 
 namespace Api.Extensions;

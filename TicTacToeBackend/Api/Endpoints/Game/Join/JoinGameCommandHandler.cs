@@ -3,7 +3,6 @@ using Core.Contracts;
 using Core.Features.Game;
 using Core.Features.Game.Join;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Model;
 using TemporaryStorage;
@@ -24,7 +23,7 @@ public class JoinGameCommandHandler(
 		if (game is null) return 400;
 		if (game.OpponentId == game.OwnerId) return 409;
 		
-			if (game.OpponentId is null)
+		if (game.OpponentId is null)
 		{
 			var userRating = await mongoDbStorage.GetByIdAsync(request.UserId);
 			if (userRating!.Rating < game.MinRate || userRating.Rating > game.MaxRate)
@@ -33,8 +32,16 @@ public class JoinGameCommandHandler(
 			game.OpponentId = request.UserId;
 			game.GameState = GameState.Started;
 
-			await eventMessageHandler.GameStarted(new GameStartEvent(game.Id, game.OwnerId, game.OpponentId.Value,
-				game.OpponentId.Value));
+			var userGames = dbContext.Games
+				.Where(x => x.OpponentId == request.UserId || x.OwnerId == request.UserId);
+
+			foreach (var userGame in userGames)
+			{
+				if (userGame.OpponentId == request.UserId) userGame.OpponentId = null;
+				if (userGame.OwnerId == request.UserId) dbContext.Games.Remove(userGame);
+			}
+			
+			await eventMessageHandler.GameStarted(new GameStartEvent(game.Id, game.OwnerId, game.OpponentId.Value, game.OpponentId.Value));
 			await dbContext.SaveChangesAsync(cancellationToken);
 		}
 

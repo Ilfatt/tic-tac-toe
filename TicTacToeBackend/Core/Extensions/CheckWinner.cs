@@ -1,10 +1,11 @@
 using Core.Features.Game;
+using MongoDB.Driver.Linq;
 
 namespace Core.Extensions;
 
 public static class CheckWinner
 {
-	public static GameMapSymbol CheckMap(this GameMapSymbol[] map)
+	public static GameMapSymbol? CheckMap(this GameMapSymbol[] map)
 	{
 		if (map.Length != 9) throw new ArgumentException("Map size not equal 9. ");
 
@@ -18,6 +19,8 @@ public static class CheckWinner
 		
 		if (map[0] == map[4] && map[4] == map[8]) return map[0];
 		if (map[2] == map[4] && map[4] == map[6]) return map[2];
+
+		if (map.All(x => x != GameMapSymbol.Empty)) return null;
 		
 		return GameMapSymbol.Empty;
 	}

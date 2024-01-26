@@ -15,4 +15,9 @@ public class GameEventMessageHandler(IHubContext<GamesHub, IGamesHub> hubContext
     {
         await hubContext.Clients.Group(@event.GameId.ToString()).MoveMade(@event);
     }
+
+    public async Task GameFinish(GameFinishEvent @event)
+    {
+        await hubContext.Clients.Group(@event.GameId.ToString()).GameFinish(@event);
+    }
 }
