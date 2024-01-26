@@ -17,13 +17,13 @@ public class GetUserDataEndpoint : IEndpoint
 				[FromServices] IMapper mapper,
 				[FromServices] IHttpContextAccessor httpContextAccessor) =>
 			{
-				var response = await mediator.Send(
-					new GetUserDataQuery(httpContextAccessor.HttpContext!.GetUserId()));
+				var userId = httpContextAccessor.HttpContext!.GetUserId();
+				var response = await mediator.Send(new GetUserDataQuery(userId));
 				
 				return response.HttpStatusCode switch
 				{
-					200 => Results.Ok(mapper.Map<GetUserDataResponse>(response)), 
-					_ => Results.Problem(statusCode: 500)
+					200 => Results.Ok(new GetUserDataResponse(userId, response.Body!.Username, response.Body.Rating)), 
+					_ => Results.Problem(statusCode: 500)	
 				};
 			})
 			.RequireAuthorization()
