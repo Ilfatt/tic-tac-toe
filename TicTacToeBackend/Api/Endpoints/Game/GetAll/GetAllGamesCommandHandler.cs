@@ -10,7 +10,11 @@ public class GetAllGamesCommandHandler(IDbContext dbContext) : IQueryHandler<Get
 {
     public async Task<Result<GetAllGamesResult>> Handle(GetAllGamesQuery request, CancellationToken cancellationToken)
     {
-        var gameResults = await dbContext.Games.Skip(request.Page).Take(request.Size).Select(game =>
+        var totalCount = await dbContext.Games.CountAsync(cancellationToken);
+        var gameResults = await dbContext.Games
+            .Skip((request.Page - 1) * request.Size)
+            .Take(request.Size)
+            .Select(game =>
             new GetGameResult(game.Id, new RateRange
             {
                 Min = game.MinRate,
@@ -18,6 +22,6 @@ public class GetAllGamesCommandHandler(IDbContext dbContext) : IQueryHandler<Get
             }, game.GameState))
             .ToArrayAsync(cancellationToken: cancellationToken);
 
-        return new GetAllGamesResult(gameResults);
+        return new GetAllGamesResult(gameResults, totalCount);
     }
 }
