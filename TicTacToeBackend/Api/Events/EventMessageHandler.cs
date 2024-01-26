@@ -10,7 +10,12 @@ public class GameEventMessageHandler(IHubContext<GamesHub, IGamesHub> hubContext
     {
         await hubContext.Clients.Group(@event.GameId.ToString()).GameStarted(@event);
     }
-    
+
+    public Task GameFinishedEvent(GameFinishedEvent @event)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task MoveMade(GameMoveEvent @event)
     {
         await hubContext.Clients.Group(@event.GameId.ToString()).MoveMade(@event);
