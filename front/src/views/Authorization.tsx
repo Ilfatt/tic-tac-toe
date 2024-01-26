@@ -5,6 +5,8 @@ import Register from "../components/Authorization/Register"
 import PageLayout from "../components/PageLayout"
 import { icons } from "../enums"
 import styled from "styled-components"
+import UseStores from "../hooks/useStores"
+import { runInAction } from "mobx"
 
 const Logo = styled.img`
   margin: 100px 0 100px;
@@ -14,31 +16,40 @@ const Logo = styled.img`
 
 const Authorization = () => {
   const navigate = useNavigate();
-  // const { userStore } = UseStores();
-  const [error, setError] = useState('');
-  const [userName, setUserName] = useState<string>();
-  const [password, setPassword] = useState<string>();
-  const [repeatPassword, setRepeatPassword] = useState<string>();
+  const { userStore } = UseStores();
+  const [error, setError] = useState<string>();
+  const [userName, setUserName] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [repeatPassword, setRepeatPassword] = useState<string>('');
 
   useEffect(() => {
     navigate('/authorization/login')
   }, [])
 
-  const onLogInHandler = useCallback(() => {
-    // if (userStore.canLogIn) {
-    //   navigate('/')
-    // } else {
-      setError('Неверный логин или пароль')
-    // }
+  const onLogInHandler = useCallback(async () => {
+    await userStore.LogIn(userName, password)
+    if (userStore.state?.isSuccess) {
+      navigate('/')
+    } else {
+      runInAction(() => {
+        setError(userStore.state?.error)
+      })
+    }
   }, [userName, password])
 
-  const onRegistrationHandler = useCallback(() => {
-    // if (password === repeatPassword) {
-    //   userStore.registration()
-    //   navigate('/')
-    // } else (
+  const onRegistrationHandler = useCallback(async () => {
+    if (password === repeatPassword) {
+      await userStore.Registration(userName, password)
+      if (userStore.state?.isSuccess) {
+        navigate('/')
+      } else {
+        runInAction(() => {
+          setError(userStore.state?.error)
+        })
+      }
+    } else {
       setError('Пароли не совпадают')
-    // )
+    }
   }, [userName, password, repeatPassword])
 
   return (

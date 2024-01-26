@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import LobbyCard from "../components/LobbyCard";
 import PageLayout from "../components/PageLayout";
 import styled from "styled-components";
 import { colors } from "../enums";
 import ModalSearchWindow from "../components/ModalWindow";
 import CreateGameModal from "../components/CreateGameModal";
+import UseStores from "../hooks/useStores";
+import { useEffectOnce } from "react-use";
 
 type Props = {
   lobbyOwner: string;
@@ -62,12 +64,14 @@ const LobbyExample : Props  = [
 ]
 
 const LobbyListPage : React.FC = () => {
-
   const [createGameModal, setCreateGameModal] = useState<boolean>(false);
+  const { userStore } = UseStores();
 
-  useEffect(() => {
-    /** фетч всех лобби */
-  }, [])
+  useEffectOnce(() => {
+    if ((!userStore.username || !userStore.rating) && userStore.token) {
+      userStore.GetUserData();
+    }
+  })
 
   return (
     <PageLayout>

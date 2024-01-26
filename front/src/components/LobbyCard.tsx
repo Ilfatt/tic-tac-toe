@@ -54,13 +54,13 @@ const JoinButton = styled.div`
   cursor: pointer;
 `
 
-type Props = {
+interface Props {
     lobbyOwner: string;
     lobbyOwnerRating: number;
     lobbyRating: number;
     lobbyId: string;
     statusProps: string;
-};
+}
 
 const LobbyCard : React.FC<Props> = ({
   lobbyOwner, lobbyRating, statusProps, lobbyId, lobbyOwnerRating

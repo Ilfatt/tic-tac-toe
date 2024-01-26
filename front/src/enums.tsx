@@ -6,6 +6,12 @@ export const icons = {
   close
 }
 
+export enum Status {
+  Error,
+  Success,
+  Fetching,
+  Initial,
+}
 
 export const colors = {
   lightGray: '#F9F9F9',
