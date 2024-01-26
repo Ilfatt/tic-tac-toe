@@ -55,15 +55,13 @@ const JoinButton = styled.div`
 `
 
 interface Props {
-    lobbyOwner: string;
-    lobbyOwnerRating: number;
     lobbyRating: number;
     lobbyId: string;
-    statusProps: string;
+    statusProps: number;
 }
 
 const LobbyCard : React.FC<Props> = ({
-  lobbyOwner, lobbyRating, statusProps, lobbyId, lobbyOwnerRating
+  lobbyRating, statusProps, lobbyId
 }) => {
   const navigate = useNavigate();
   const [status, setStatus] = useState(statusProps);
@@ -77,12 +75,11 @@ const LobbyCard : React.FC<Props> = ({
   return (
     <CardContainer>
       <CardHeader>
-        <p>Лобби игрока {lobbyOwner}</p>
+        <p>Лобби {lobbyId}</p>
         <p>{status}</p>
       </CardHeader>
       <CardBody>
         <p>Максимальный рейтинг: {lobbyRating}</p>
-        <p>Рейтинг создателя: {lobbyOwnerRating}</p>
       </CardBody>
       <ButtonContainer>
         <JoinButton

@@ -35,7 +35,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
     width?: string;
     title?: string;
     placeholder?: string;
-    validate?: 'text' | 'password'
+    validate?: 'text' | 'password' | 'number'
     types?: 'text' | 'photo';
     value?: string;
     isRequired?: boolean;
@@ -43,6 +43,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
     onChangeValue?: (value : string) => void;
     isError?: boolean;
     onClick?: () => void;
+    min?: number;
 }
 
 const InputComponent : React.FC<Props> = ({
@@ -55,6 +56,7 @@ const InputComponent : React.FC<Props> = ({
   textAlign,
   onChangeValue,
   isError,
+  min,
 }) => {
 
   const onChangeHandler = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,6 +74,7 @@ const InputComponent : React.FC<Props> = ({
         )
       }
       <Input
+        min={min}
         width={width}
         placeholder={placeholder}
         value={value}

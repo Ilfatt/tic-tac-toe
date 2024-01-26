@@ -7,6 +7,7 @@ interface JwtResponse {
 interface UserData {
   username: string;
   userRating: number;
+  userId: string;
 }
 
 class Authorization {

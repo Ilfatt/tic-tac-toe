@@ -1,9 +1,13 @@
 import logo from "./assets/images/logo.svg"
 import close from "./assets/images/close.svg"
+import circle from "./assets/images/circle.svg"
+import cross from "./assets/images/cross.svg"
 
 export const icons = {
   logo,
-  close
+  close,
+  circle,
+  cross,
 }
 
 export enum Status {

@@ -5,8 +5,7 @@ import { colors } from "../enums"
 import { useState } from "react";
 import ModalSearchWindow from "./ModalWindow";
 import RaitingList from "./RaitingList";
-import { removeToken } from "../services/ApiConnection";
-import UseStores from "../hooks/useStores";
+import ProfileModal from "./ProfileModal";
 
 interface ButtonProps {
   isActive?: boolean | undefined
@@ -55,7 +54,7 @@ const Button = styled.button<ButtonProps>`
 const PageHeader : React.FC = () => {
   const navigate = useNavigate();
   const [ratingModal, setRatingModal] = useState<boolean | undefined>(undefined);
-  const { userStore } = UseStores();
+  const [profileModal, setProfileModal] = useState<boolean | undefined>(undefined);
 
   return (
     <Header>
@@ -75,12 +74,10 @@ const PageHeader : React.FC = () => {
       <ButtonContainer>
         <Button
           onClick={() => {
-            removeToken();
-            userStore.clearStore();
-            window.location.reload();
+            setProfileModal(true);
           }}
         >
-          Выйти
+          Профиль
         </Button>
       </ButtonContainer>
 
@@ -93,6 +90,20 @@ const PageHeader : React.FC = () => {
             title='Рейтинг'
             children={(
               <RaitingList />
+            )}
+            width={600}
+          />
+        )
+      }
+      {
+        profileModal && (
+          <ModalSearchWindow
+            onClose={() => {
+              setProfileModal(undefined)
+            }}
+            title='Профиль'
+            children={(
+              <ProfileModal />
             )}
             width={800}
           />

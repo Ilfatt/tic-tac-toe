@@ -9,7 +9,6 @@ import { observer } from "mobx-react";
 const Router = () => {
 	const { userStore } = UseStores();
 	const navigate = useNavigate();
-	console.warn(userStore.username);
 
 	useEffect(() => {
 		if (!userStore.token) {

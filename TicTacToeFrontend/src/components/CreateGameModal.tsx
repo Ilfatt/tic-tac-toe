@@ -3,6 +3,8 @@ import InputComponent from "./InputComponent";
 import PageLayout from "./PageLayout";
 import styled from "styled-components";
 import { colors } from "../enums";
+import UseStores from "../hooks/useStores";
+import { useNavigate } from "react-router-dom";
 
 const Button = styled.button`
   padding: 14px 48px;
@@ -23,23 +25,28 @@ const Container = styled.div`
 `
 
 const CreateGameModal: React.FC = () => {
-  const [maxRating, setMaxRating] = useState<string>('');
+  const [maxRating, setMaxRating] = useState<number>(0);
+  const { lobbyListPageStore } = UseStores();
+  const navigate = useNavigate();
 
   return (
     <PageLayout>
       <Container>
         <InputComponent
-          value={maxRating}
+          value={maxRating.toString()}
           onChangeValue={(val) => {
-            setMaxRating(val)
+            setMaxRating(Number(val))
           }}
           placeholder='Введите максимальный рейтинг противника'
           textAlign="center"
+          validate="number"
           width="400"
+          min={0}
         />
         <Button
           onClick={() => {
-            ///
+            const id = lobbyListPageStore.createLobby(maxRating)
+            navigate(`lobby/${id}`)
           }}
         >
           Создать

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import LobbyCard from "../components/LobbyCard";
 import PageLayout from "../components/PageLayout";
 import styled from "styled-components";
@@ -7,14 +7,7 @@ import ModalSearchWindow from "../components/ModalWindow";
 import CreateGameModal from "../components/CreateGameModal";
 import UseStores from "../hooks/useStores";
 import { useEffectOnce } from "react-use";
-
-type Props = {
-  lobbyOwner: string;
-  lobbyOwnerRating: number;
-  lobbyRating: number;
-  lobbyId: string;
-  status: string;
-}[];
+import { observer } from "mobx-react";
 
 const TitleContainer = styled.div`
   width: 700px;
@@ -39,39 +32,53 @@ const Button = styled.button`
   cursor: pointer;
 `
 
-const LobbyExample : Props  = [
-  {
-    lobbyOwner: 'Чел2',
-    lobbyRating: 123,
-    lobbyOwnerRating: 50,
-    lobbyId: '1',
-    status: 'Ожидание'
-  },
-  {
-    lobbyOwner: 'Чел',
-    lobbyRating: 1234,
-    lobbyOwnerRating: 5000,
-    lobbyId: '2',
-    status: 'Ожидание'
-  },
-  {
-    lobbyOwner: 'Чел3',
-    lobbyRating: 60,
-    lobbyOwnerRating: 100,
-    lobbyId: '3',
-    status: 'Ожидание'
-  },
-]
-
 const LobbyListPage : React.FC = () => {
   const [createGameModal, setCreateGameModal] = useState<boolean>(false);
-  const { userStore } = UseStores();
+  const { userStore, lobbyListPageStore } = UseStores();
+  const [page, setPage] = useState(1);
 
   useEffectOnce(() => {
-    if ((!userStore.username || !userStore.rating) && userStore.token) {
+    if ((!userStore.userId) && userStore.token) {
       userStore.GetUserData();
     }
+    lobbyListPageStore.fetchLobbys(page);
   })
+
+  const handleScroll = () => {
+    if ((window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight)
+      && lobbyListPageStore.totalCount !== lobbyListPageStore.lobbys?.length)
+    {
+      setPage(prev => prev + 1);
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll)
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      lobbyListPageStore.clearStore();
+    }
+  }, [])
+
+  const LobbyList = useMemo(() => {
+    return lobbyListPageStore.lobbys?.length ? (
+      lobbyListPageStore.lobbys.map((lobby) => (
+        <LobbyCard
+          key={lobby.gameId}
+          lobbyId={lobby.gameId}
+          lobbyRating={lobby.maxrating}
+          statusProps={lobby.gameState}
+        />
+      ))
+    ) : (
+      <p>Нет активных игр</p>
+    )
+  }, [lobbyListPageStore.lobbys])
+
+  useEffect(() => {
+    lobbyListPageStore.fetchLobbys(page);
+  }, [page])
 
   return (
     <PageLayout>
@@ -86,18 +93,7 @@ const LobbyListPage : React.FC = () => {
           Создать игру
         </Button>
       </TitleContainer>
-      {
-        LobbyExample.map((lobby) => (
-          <LobbyCard
-            key={lobby.lobbyId}
-            lobbyId={lobby.lobbyId}
-            lobbyOwner={lobby.lobbyOwner}
-            lobbyRating={lobby.lobbyRating}
-            lobbyOwnerRating={lobby.lobbyOwnerRating}
-            statusProps={lobby.status}
-          />
-        ))
-      }
+      {LobbyList}
       {
         createGameModal && (
           <ModalSearchWindow
@@ -112,5 +108,5 @@ const LobbyListPage : React.FC = () => {
   )
 }
 
-export default LobbyListPage;
+export default observer(LobbyListPage);
 

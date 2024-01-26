@@ -8,6 +8,8 @@ import ErrorStateStore from "./StateStores/ErrorStateStore";
 class UserStore {
   token?: string;
 
+  userId?: string;
+
   username?: string
 
   rating?: number;
@@ -61,6 +63,7 @@ class UserStore {
         this.username = response.username;
         this.rating = response.userRating;
         this.state = new SuccessStateStore();
+        this.userId = response.userId;
       })
     }
     catch (error) {
