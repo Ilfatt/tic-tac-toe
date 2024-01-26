@@ -43,6 +43,19 @@
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
+      <Content Remove="Events\Abstractions\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Events\Abstractions\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="Events\Abstractions\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Events\Abstractions\**" />
     </ItemGroup>
 
 </Project>

@@ -1,4 +1,6 @@
+using Api.Events;
 using Api.Extensions;
+using Api.Hubs;
 using Api.Mappings;
 using Core.Features.User.Registration;
 using FluentValidation;
@@ -11,14 +13,19 @@ builder.ConfigurePostgresqlConnection();
 builder.AddMasstransitRabbitMq();
 builder.AddAuthorization();
 
+builder.Services.AddSignalR();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IEventMessageHandler, GameEventMessageHandler>();
 builder.Services.AddCors();
 builder.Services.AddMongoDb(builder.Configuration);
 
 var validatorsAssembly = typeof(UserRegistrationValidator).Assembly;
+var thisAssembly = typeof(Program).Assembly;
 builder.Services.AddValidatorsFromAssembly(validatorsAssembly);
+builder.Services.AddValidatorsFromAssembly(thisAssembly);
 builder.Services.AddValidationBehaviorsFromAssembly(validatorsAssembly);
-builder.Services.AddMediatR(x => x.RegisterServicesFromAssembly(validatorsAssembly));
+builder.Services.AddMediatR(x => 
+	x.RegisterServicesFromAssemblies(validatorsAssembly, thisAssembly));
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 var app = builder.Build();
@@ -39,5 +46,7 @@ app.UseCors(option =>
 	option.AllowAnyMethod();
 	option.AllowAnyOrigin();
 });
+
+app.MapHub<GamesHub>("/api/room");
 
 app.Run();

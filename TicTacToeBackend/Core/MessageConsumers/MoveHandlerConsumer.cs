@@ -1,14 +1,13 @@
 ﻿using MassTransit;
-using Model.Dto;
 
 namespace Core.MessageConsumers;
 
 /// <summary>
 /// Обрабочик хода
 /// </summary>
-public class MoveHandlerConsumer : IConsumer<MoveDto>
+public class MoveHandlerConsumer : IConsumer
 {
-	public Task Consume(ConsumeContext<MoveDto> context)
+	public Task Consume(ConsumeContext context)
 	{
 		throw new NotImplementedException();
 	}
