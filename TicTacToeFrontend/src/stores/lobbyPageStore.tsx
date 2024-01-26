@@ -1,6 +1,9 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 import StateBaseStore from "./StateStores/StateStore";
 import StateStore from "./StateStores/StateStore";
+import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
+import FetchingStateStore from "./StateStores/FetchingStateStore";
+import { appApiUrl, getToken } from "../services/ApiConnection";
 
 class LobbyPageStore {
   ownerId?: string;
@@ -11,6 +14,8 @@ class LobbyPageStore {
 
   oponnetnName?: string;
 
+  socket?: HubConnection;
+
   ownerName?: string;
 
   state?: StateStore;
@@ -18,6 +23,21 @@ class LobbyPageStore {
   constructor() {
     makeAutoObservable(this);
     this.state = new StateBaseStore();
+  }
+
+  async initSocket() {
+    try {
+      this.state = new FetchingStateStore();
+      this.socket = new HubConnectionBuilder()
+      .withUrl(
+        `${appApiUrl}/api/room`, {accessTokenFactory: () => getToken()}
+      ).build();
+    }
+    catch (error) {
+      runInAction(() => {
+
+      })
+    }
   }
 
   public clearStore() {
