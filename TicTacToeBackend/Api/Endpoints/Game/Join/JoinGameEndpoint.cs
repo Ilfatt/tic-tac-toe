@@ -25,6 +25,7 @@ public class JoinGameEndpoint : IEndpoint
 				{
 					200 => Results.Ok(mapper.Map<JoinGameResponse>(response)),
 					400 => Results.BadRequest(),
+					409 => Results.Conflict(),
 					_ => Results.Problem(statusCode: 500)
 				};
 			})
@@ -36,6 +37,8 @@ public class JoinGameEndpoint : IEndpoint
 				new SwaggerResponseAttribute(StatusCodes.Status500InternalServerError),
 				new SwaggerResponseAttribute(StatusCodes.Status400BadRequest,
 					"Не пройдена валидация."),
+				new SwaggerResponseAttribute(StatusCodes.Status409Conflict,
+					"Нельзя присоедниться к созданной самим собой игре"),
 				new SwaggerResponseAttribute(
 					StatusCodes.Status200OK,
 					"",
