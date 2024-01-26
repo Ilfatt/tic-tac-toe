@@ -4,5 +4,6 @@ namespace Api.Hubs.Abstractions;
 
 public interface IGamesHub
 {
-    public Task GameStarted(GameStartEvent @event);
+    public new Task GameStarted(GameStartEvent @event);
+    public Task MoveMade(GameMoveEvent @event);
 }
