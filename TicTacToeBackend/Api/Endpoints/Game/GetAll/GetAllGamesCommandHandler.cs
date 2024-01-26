@@ -14,8 +14,9 @@ public class GetAllGamesCommandHandler(IDbContext dbContext) : IQueryHandler<Get
             new GetGameResult(game.Id, new RateRange
             {
                 Min = game.MinRate,
-                Max = game.MaxRate
-            })).ToArrayAsync(cancellationToken: cancellationToken);
+                Max = game.MaxRate,
+            }, game.GameState))
+            .ToArrayAsync(cancellationToken: cancellationToken);
 
         return new GetAllGamesResult(gameResults);
     }

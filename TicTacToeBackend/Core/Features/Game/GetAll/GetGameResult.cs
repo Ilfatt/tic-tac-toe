@@ -1,3 +1,5 @@
+using Model;
+
 namespace Core.Features.Game.GetAll;
 
-public record GetGameResult(Guid GameId, RateRange RateRange);
+public record GetGameResult(Guid GameId, RateRange RateRange, GameState GameState);
