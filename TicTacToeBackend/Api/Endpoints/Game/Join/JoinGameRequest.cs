@@ -1,4 +1,3 @@
-using Core.Features.Game;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace Api.Endpoints.Game.Join;

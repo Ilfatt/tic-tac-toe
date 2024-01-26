@@ -1,3 +1,4 @@
+using Api.Contracts;
 using AutoMapper;
 using Core.Features.Game.GetAll;
 using MediatR;
@@ -6,7 +7,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace Api.Endpoints.Game.GetAll;
 
-public class GetAllGamesEndpoint
+public class GetAllGamesEndpoint : IEndpoint
 {
     public void AddRoute(IEndpointRouteBuilder app)
     {
@@ -27,7 +28,7 @@ public class GetAllGamesEndpoint
             })
             .RequireAuthorization()
             .WithOpenApi()
-            .WithTags("User")
+            .WithTags("Game")
             .WithSummary("Получение существующих игровых сессий")
             .WithMetadata(
                 new SwaggerResponseAttribute(StatusCodes.Status500InternalServerError),

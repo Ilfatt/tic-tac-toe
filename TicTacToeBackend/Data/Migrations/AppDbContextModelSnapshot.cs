@@ -223,24 +223,26 @@ namespace Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int[]>("Map")
+                    b.Property<int[]>("GameMap")
                         .IsRequired()
                         .HasColumnType("integer[]");
 
-                    b.Property<int>("MaxRating")
+                    b.Property<int>("GameState")
                         .HasColumnType("integer");
 
-                    b.Property<Guid?>("Player1Id")
+                    b.Property<int>("MaxRate")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MinRate")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid?>("OpponentId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("Player2Id")
+                    b.Property<Guid>("OwnerId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Player1Id");
-
-                    b.HasIndex("Player2Id");
 
                     b.ToTable("Games");
                 });
@@ -294,21 +296,6 @@ namespace Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Model.Game", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser<System.Guid>", "Player1")
-                        .WithMany()
-                        .HasForeignKey("Player1Id");
-
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser<System.Guid>", "Player2")
-                        .WithMany()
-                        .HasForeignKey("Player2Id");
-
-                    b.Navigation("Player1");
-
-                    b.Navigation("Player2");
                 });
 #pragma warning restore 612, 618
         }
