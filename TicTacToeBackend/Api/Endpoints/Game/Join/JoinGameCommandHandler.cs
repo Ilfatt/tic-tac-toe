@@ -23,6 +23,7 @@ public class JoinGameCommandHandler(
 			cancellationToken: cancellationToken);
 		if (game is null) return 400;
 		if (game.OpponentId == game.OwnerId) return 409;
+		
 		if (game.OpponentId is null)
 		{
 			var userRating = await mongoDbStorage.GetByIdAsync(request.UserId);
@@ -34,16 +35,7 @@ public class JoinGameCommandHandler(
 
 			await eventMessageHandler.GameStarted(new GameStartEvent(game.Id, game.OwnerId, game.OpponentId.Value));
 			await dbContext.SaveChangesAsync(cancellationToken);
-			
-			return new JoinGameResult(game.Id, game.OwnerId, game.OpponentId, new GameProgress
-			{
-				GameMap = game.GameMap,
-				MoveUserId = game.OpponentId
-			});
 		}
-		
-		await eventMessageHandler.GameStarted(new GameStartEvent(game.Id, game.OwnerId, game.OpponentId.Value));
-		await dbContext.SaveChangesAsync(cancellationToken);
 
 		return new JoinGameResult(game.Id, game.OwnerId, game.OpponentId, new GameProgress
 		{
