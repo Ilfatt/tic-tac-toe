@@ -1,0 +1,24 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'SF-Pro-Display-Regular';
+  ::-webkit-scrollbar {
+      width: 0;
+    }
+
+  ::-webkit-input-placeholder {
+    color: #3C3C434D;
+    font-size: 17px;
+  }
+}
+
+html {
+  width: 100%;
+  height: 100%;
+}
+
+@font-face {
+	font-family: 'SF-Pro-Display-Regular';
+	src: url(./src/assets/fonts/SF-Pro-Display-Regular.otf);
+}
