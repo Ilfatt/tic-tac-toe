@@ -18,8 +18,6 @@ public class MappingProfile : Profile
 
 		CreateMap<UserLoginRequest, UserLoginQuery>();
 		CreateMapFromResult<UserLoginResult, UserLoginResponse>();
-		
-		CreateMapFromResult<GetUserDataResult, GetUserDataResponse>();
 	}
 
 	private void CreateMapFromResult<TSource, TDestination>()
