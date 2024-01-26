@@ -1,7 +1,6 @@
 using Api.Contracts;
 using Api.Extensions;
 using MassTransit;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Model.Dto;
 
