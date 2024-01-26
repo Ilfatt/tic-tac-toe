@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 /** Базовый URL */
-export const appApiUrl = 'http://localhost:5000';
+export const appApiUrl = 'http://localhost:9000';
 
 /** Базовые настройки axios */
 export const ApiConnection = axios.create({
