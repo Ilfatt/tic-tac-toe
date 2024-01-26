@@ -12,7 +12,7 @@ services:
     image: mongo:6-jammy
     container_name: mongodb
     restart: always
-    ports:               
+    ports:
       - "27017:27017"
   PostgreSQL:
     container_name: postgreSQL
@@ -48,4 +48,11 @@ services:
       - RabbitMq
       - MongoStorage
       - PostgreSQL
-  
+  TicTacToeFrontend:
+    image: tictactoefrontend
+    container_name: tictactoefrontend
+    ports:
+      - "8080:80"
+    build:
+      context: ./TicTacToeFrontend
+      dockerfile: Dockerfile
